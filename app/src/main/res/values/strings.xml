@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BuriedPointFactory</string>
+    <string name="send_message_point">发送数据</string>
+    <string name="receive_message_point">接收数据</string>
+</resources>

@@ -1,0 +1,4 @@
+rootProject.name='BuriedPointFactory'
+include ':app'
+include ':annotation-processor'
+include ':annotation'
