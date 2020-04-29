@@ -8,13 +8,11 @@ import java.lang.annotation.Target;
 /**
  * @Author: linwei
  * @Time: 2020/4/27
- * @Description: 增加埋点注解
+ * @Description: 界面跳转注解
  */
-
 @Retention(RetentionPolicy.CLASS)
-@Target({ElementType.TYPE, ElementType.METHOD,ElementType.CONSTRUCTOR})
-public @interface Point {
-    String key() default "";
+@Target(ElementType.FIELD)
+public @interface IntentField {
 
-    int message() default -1;
+    String value() default "";
 }

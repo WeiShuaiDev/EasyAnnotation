@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Author: weiyun
+ * @Author: linwei
  * @Time: 2020/4/28
  * @Description: ButterKnife中View绑定注解
  */
