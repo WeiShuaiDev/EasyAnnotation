@@ -6,4 +6,7 @@ package com.linwei.annotation;
  * @Description: ButterKnife中View绑定注解
  */
 public @interface OnClick {
+
+
+
 }

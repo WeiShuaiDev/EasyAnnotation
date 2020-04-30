@@ -6,7 +6,7 @@ dependencies {
     implementation 'com.squareup:javapoet:1.11.1'
     implementation project(':annotation')
 
-}
+}   
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
