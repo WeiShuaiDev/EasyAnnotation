@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Author: linwei
+ * @Author: LW
  * @Time: 2020/4/27
  * @Description: 界面跳转变量注解
  */

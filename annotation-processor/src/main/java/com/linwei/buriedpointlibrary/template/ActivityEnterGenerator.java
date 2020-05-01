@@ -17,7 +17,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
 /**
- * @Author: linwei
+ * @Author: LW
  * @Time: 2020/4/30
  * @Description: Activity跳转模板生成
  */

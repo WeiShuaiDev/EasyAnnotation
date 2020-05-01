@@ -1,10 +1,8 @@
 package com.linwei.buriedpointlibrary;
 
-import com.google.auto.service.AutoService;
 import com.linwei.annotation.Point;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -21,7 +19,11 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
-
+/**
+ * @Author: LW
+ * @Time: 2020/4/30
+ * @Description: 埋点注解处理器
+ */
 //@SupportedAnnotationTypes({"com.linwei.buriedpointlibrary.Point"})
 //@AutoService(javax.annotation.processing.Processor.class)
 //@SupportedSourceVersion(SourceVersion.RELEASE_7)

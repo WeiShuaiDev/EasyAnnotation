@@ -1,9 +1,9 @@
 package com.linwei.buriedpointlibrary.config;
 
 /**
- * @Author: weiyun
+ * @Author: LW
  * @Time: 2020/4/30
- * @Description:
+ * @Description: 常量配置
  */
 public interface Constant {
     public String SUFFIX = "_JumpActivity";

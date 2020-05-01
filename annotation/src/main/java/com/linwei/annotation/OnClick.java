@@ -1,7 +1,7 @@
 package com.linwei.annotation;
 
 /**
- * @Author: linwei
+ * @Author: LW
  * @Time: 2020/4/28
  * @Description: ButterKnife中View绑定注解
  */
