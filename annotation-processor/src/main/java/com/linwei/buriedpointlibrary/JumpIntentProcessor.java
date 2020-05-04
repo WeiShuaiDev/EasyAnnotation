@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService;
 import com.linwei.annotation.IntentMethod;
 import com.linwei.annotation.IntentField;
 import com.linwei.buriedpointlibrary.template.ActivityEnterGenerator;
+import com.linwei.buriedpointlibrary.template.ActivityOutGenerator;
 import com.linwei.buriedpointlibrary.template.Generator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
@@ -60,6 +61,7 @@ public class JumpIntentProcessor extends AbstractProcessor {
      */
     private void initGenerated() {
         mGenerators.add(new ActivityEnterGenerator());
+        mGenerators.add(new ActivityOutGenerator());
     }
 
     @Override
@@ -94,13 +96,13 @@ public class JumpIntentProcessor extends AbstractProcessor {
                     ElementKind fieldKind = field.getKind();
                     if (fieldKind == ElementKind.FIELD) {
                         //判断Elements类型，并获取Filed参数值
-                        variableElement = (VariableElement) method;
+                        variableElement = (VariableElement) field;
                         String filedValue = variableElement.getAnnotation(IntentField.class).value();
 
-                        if (mProcessorUtils.isNotEmpty(filedValue)) continue;
+                        if (!mProcessorUtils.isNotEmpty(filedValue)) continue;
 
                         if (filedValue.equals(methodValue)) {
-                            //我们这里的IntentField是应用在一般成员变量上的注解
+                            //IntentField是应用在一般成员变量上的注解
                             mVariableElementLists.get(methodValue).add((VariableElement) field);
                         }
                     }

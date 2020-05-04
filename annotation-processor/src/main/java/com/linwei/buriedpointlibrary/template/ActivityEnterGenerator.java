@@ -1,6 +1,5 @@
 package com.linwei.buriedpointlibrary.template;
 
-import com.linwei.annotation.IntentMethod;
 import com.linwei.buriedpointlibrary.config.Constant;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 import com.squareup.javapoet.MethodSpec;
@@ -19,7 +18,7 @@ import javax.tools.Diagnostic;
 /**
  * @Author: LW
  * @Time: 2020/4/30
- * @Description: Activity跳转模板生成
+ * @Description: Activity跳转起始模板生成
  */
 public class ActivityEnterGenerator implements Generator {
 
@@ -31,7 +30,7 @@ public class ActivityEnterGenerator implements Generator {
      * @param processingEnv
      */
     @Override
-    public void generator(String clazzFlag,
+    public void generator(String clazzType,
                           List<VariableElement> variableElements,
                           ExecutableElement executableElement,
                           ProcessorUtils processorUtils,
@@ -57,14 +56,14 @@ public class ActivityEnterGenerator implements Generator {
 
         }
 
-        if (!processorUtils.isNotEmpty(clazzFlag)) {
+        if (!processorUtils.isNotEmpty(clazzType)) {
             processingEnv.getMessager().printMessage(
                     Diagnostic.Kind.ERROR,
                     "IntentClass注解定义不明确,无法进行界面跳转!"
             );
         }
 
-        String clazz = clazzFlag.substring(clazzFlag.lastIndexOf("_"));
+        String clazz = clazzType.substring(clazzType.lastIndexOf("_")+1);
 
         methodBuilder.addStatement("intent.setClass((android.content.Context)context, " + clazz + ".class)");
         methodBuilder.addStatement("((android.content.Context)context).startActivity(intent)");
@@ -73,7 +72,7 @@ public class ActivityEnterGenerator implements Generator {
         TypeElement typeElement = (TypeElement)
                 executableElement.getEnclosingElement();
 
-        processorUtils.writeToFile(clazzFlag,
+        processorUtils.writeToFile(clazzType,
                 processorUtils.getPackageName(typeElement),
                 methodBuilder.build(), processingEnv, null);
 
