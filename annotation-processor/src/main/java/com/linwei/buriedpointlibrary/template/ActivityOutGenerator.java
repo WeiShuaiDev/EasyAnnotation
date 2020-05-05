@@ -19,8 +19,6 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
-import sun.reflect.generics.scope.MethodScope;
-
 /**
  * @Author: LW
  * @Time: 2020/5/4
@@ -34,6 +32,7 @@ public class ActivityOutGenerator implements Generator {
                           ExecutableElement executableElement,
                           ProcessorUtils processorUtils,
                           ProcessingEnvironment processingEnv) {
+        System.out.println("ActivityOutGenerator");
         //存储成员变量信息
         ArrayList<FieldSpec> listField = new ArrayList<>();
 
@@ -49,10 +48,10 @@ public class ActivityOutGenerator implements Generator {
             );
         }
         //获取目标对象
-        String next = clazzType.substring(clazzType.lastIndexOf("-") + 1);
+        String next = clazzType.substring(clazzType.lastIndexOf("_") + 1);
 
         methodBuilder.addParameter(Object.class,"activity");
-        methodBuilder.addStatement(next+" nextActivity=("+next+")activity");
+        methodBuilder.addStatement(next+" nextActivity = ("+next+") activity");
         methodBuilder.addStatement("android.content.Intent intent=nextActivity.getIntent()");
 
         for(VariableElement element :variableElements){
@@ -71,12 +70,33 @@ public class ActivityOutGenerator implements Generator {
             listField.add(fieldSpec);
 
             if(processorUtils.isElementNoDefaultValue(typeName.toString())){
+                methodBuilder.addStatement("this."+fieldName+"=intent.get"+intentTypeName+"Extra(\""+fieldName+"\")");
             }else{
-
+                if(intentTypeName==null){
+                    processingEnv.getMessager().printMessage(
+                            Diagnostic.Kind.ERROR,
+                            "the type:" + element.asType().toString() + " is not support"
+                    );
+                }else{
+                    String defaultValue="default"+fieldName;
+                    if("".equals(intentTypeName)){
+                        //序列化数据获取
+                        methodBuilder.addStatement("this."+fieldName+"=("+typeName+")intent.getSerializableExtra(\"" + fieldName + "\")");
+                    }else{
+                        methodBuilder.addParameter(typeName,defaultValue);
+                        methodBuilder.addStatement("this."+ fieldName +"= intent.get"
+                                + intentTypeName + "Extra(\"" + fieldName + "\", " + defaultValue + ")");
+                    }
+                }
             }
-
-
         }
+        methodBuilder.addStatement("return this");
 
+        TypeElement typeElement = (TypeElement)
+                executableElement.getEnclosingElement();
+
+        processorUtils.writeToFile(clazzType,
+                processorUtils.getPackageName(typeElement),
+                methodBuilder.build(), processingEnv, listField);
     }
 }

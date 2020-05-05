@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.linwei.annotation.Point;
 import com.linwei.buriedpointfactory.runtime.RuntimeParser;
@@ -16,10 +17,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent = new Intent();
-
+        initData();
         apply();
+    }
+
+    /**
+     * 获取数据
+     */
+    private void initData() {
+//        OneActivity_MainActivity activity = (OneActivity_MainActivity)
+//                new OneActivity_MainActivity()
+//                        .jumpOutActivity(this, 0);
+//        int count = activity.count;
+//        String name = activity.name;
+//        Toast.makeText(this,
+//                "count="+count+";name="+name,Toast.LENGTH_SHORT).show();
+
     }
 
     @Point(key = "00", message = R.string.send_message_point)

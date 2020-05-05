@@ -61,7 +61,7 @@ public class JumpIntentProcessor extends AbstractProcessor {
      */
     private void initGenerated() {
         mGenerators.add(new ActivityEnterGenerator());
-        mGenerators.add(new ActivityOutGenerator());
+//        mGenerators.add(new ActivityOutGenerator());
     }
 
     @Override
@@ -113,7 +113,6 @@ public class JumpIntentProcessor extends AbstractProcessor {
         //根据获取注解信息，进行代码文件生成
         for (Map.Entry<String, List<VariableElement>> entry : mVariableElementLists.entrySet()) {
             if (!mProcessorUtils.isNotEmpty(entry.getKey())) continue;
-
             executableElement = mExecutableElementLists.get(entry.getKey());
             for (Generator generator : mGenerators) {
                 generator.generator(entry.getKey(), entry.getValue(),

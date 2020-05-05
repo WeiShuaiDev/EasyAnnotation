@@ -5,14 +5,25 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
+import javax.tools.JavaFileObject;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * @Author: LW
@@ -154,11 +165,27 @@ public class ProcessorUtils {
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec).build();
 
         try {
-            javaFile.writeTo(processingEnv.getFiler());
+            //获取写入文件路径
+            File file = new File(packageName);
+            if(!file.exists()){
+                Path outputDirectory =file.toPath();
+                System.out.println("outputDirectory1"+outputDirectory);
+                if (!packageName.isEmpty()) {
+                    for (String packageComponent : packageName.split("\\.")) {
+                        outputDirectory = outputDirectory.resolve(packageComponent);
+                    }
+                }
+                System.out.println("outputDirectory1"+outputDirectory);
+                Path outputPath = outputDirectory.resolve(typeSpec.name + ".java");
+                System.out.println("outputPath"+outputPath);
+                try (Writer writer = new OutputStreamWriter(Files.newOutputStream(outputPath), UTF_8)) {
+                    javaFile.writeTo(writer);
+                }
+            }else{
+                javaFile.writeTo(processingEnv.getFiler());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 }

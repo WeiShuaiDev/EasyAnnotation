@@ -6,7 +6,7 @@ package com.linwei.buriedpointlibrary.config;
  * @Description: 常量配置
  */
 public interface Constant {
-    public String METHOD_ENTER_ACTIVITY = "jumpEnterActivity";
+    public String METHOD_ENTER_ACTIVITY = "enterActivity";
 
-    public String METHOD_OUT_ACTIVITY = "jumpOutActivity";
+    public String METHOD_OUT_ACTIVITY = "outActivity";
 }

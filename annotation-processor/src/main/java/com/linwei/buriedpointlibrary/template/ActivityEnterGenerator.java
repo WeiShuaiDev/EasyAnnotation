@@ -24,7 +24,7 @@ public class ActivityEnterGenerator implements Generator {
 
 
     /**
-     * @param clazzFlag        类
+     * @param clazzType        类
      * @param variableElements 字段
      * @param processorUtils   工具
      * @param processingEnv
@@ -35,7 +35,7 @@ public class ActivityEnterGenerator implements Generator {
                           ExecutableElement executableElement,
                           ProcessorUtils processorUtils,
                           ProcessingEnvironment processingEnv) {
-
+        System.out.println("ActivityEnterGenerator");
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_ENTER_ACTIVITY)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class);
