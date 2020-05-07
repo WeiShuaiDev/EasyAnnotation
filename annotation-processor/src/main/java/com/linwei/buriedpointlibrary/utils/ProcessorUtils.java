@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,6 +22,8 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
+import javax.tools.DocumentationTool;
+import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -163,29 +166,58 @@ public class ProcessorUtils {
         }
 
         JavaFile javaFile = JavaFile.builder(packageName, typeSpec).build();
-
         try {
             //获取写入文件路径
-            File file = new File(packageName);
-            if(!file.exists()){
-                Path outputDirectory =file.toPath();
-                System.out.println("outputDirectory1"+outputDirectory);
-                if (!packageName.isEmpty()) {
-                    for (String packageComponent : packageName.split("\\.")) {
+            File file = new File("");
+            Path outputDirectory =file.toPath();
+                if (!javaFile.packageName.isEmpty()) {
+                    for (String packageComponent : javaFile.packageName.split("\\.")) {
                         outputDirectory = outputDirectory.resolve(packageComponent);
                     }
                 }
-                System.out.println("outputDirectory1"+outputDirectory);
                 Path outputPath = outputDirectory.resolve(typeSpec.name + ".java");
-                System.out.println("outputPath"+outputPath);
-                try (Writer writer = new OutputStreamWriter(Files.newOutputStream(outputPath), UTF_8)) {
-                    javaFile.writeTo(writer);
-                }
+                outputPath= outputPath.toAbsolutePath();
+                System.out.println("outputPath"+outputPath.toUri().getPath());
+                 file= outputPath.toFile();
+            if(!file.exists()){
+                 Writer writer = new OutputStreamWriter(Files.newOutputStream(outputPath), UTF_8);
+                 javaFile.writeTo(writer);
             }else{
-                javaFile.writeTo(processingEnv.getFiler());
+                Filer filer = processingEnv.getFiler();
+                if(filer!=null) {
+                    FileObject resource = filer.getResource(DocumentationTool.Location.DOCLET_PATH,
+                            packageName, typeSpec.name + ".java");
+
+//                    String path = resource.toUri().getPath();
+//                    System.out.println("+++++++" + path);
+                }
+                superWriteTo(javaFile,processingEnv.getFiler());
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void superWriteTo(JavaFile javaFile,Filer filer) throws IOException {
+        String fileName = javaFile.packageName.isEmpty()
+                ? javaFile.typeSpec.name
+                : javaFile.packageName + "." + javaFile.typeSpec.name;
+        System.out.println("fileName"+fileName);
+        List<Element> originatingElements = javaFile.typeSpec.originatingElements;
+        System.out.println("originatingElements"+originatingElements.size());
+        JavaFileObject filerSourceFile = filer.createSourceFile(fileName,
+                originatingElements.toArray(new Element[originatingElements.size()]));
+        URI uri = filerSourceFile.toUri();
+        String path = uri.getPath();
+        System.out.println("path"+path);
+        try (Writer writer = filerSourceFile.openWriter()) {
+            javaFile.writeTo(writer);
+        } catch (Exception e) {
+            try {
+                filerSourceFile.delete();
+            } catch (Exception ignored) {
+            }
+            throw e;
         }
     }
 }

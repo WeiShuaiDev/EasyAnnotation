@@ -1,6 +1,5 @@
 package com.linwei.buriedpointlibrary;
 
-import com.google.auto.service.AutoService;
 import com.linwei.annotation.IntentMethod;
 import com.linwei.annotation.IntentField;
 import com.linwei.buriedpointlibrary.template.ActivityEnterGenerator;

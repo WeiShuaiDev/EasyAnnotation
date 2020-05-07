@@ -37,13 +37,13 @@ public class OneActivity extends AppCompatActivity {
 
     @IntentMethod("OneActivity_MainActivity")
     public void jumpOneToMainActivity() {
-        new OneActivity_MainActivity().jumpEnterActivity(
-                OneActivity.this,name,count);
+//        new OneActivity_MainActivity().jumpEnterActivity(
+//                OneActivity.this,name,count);
     }
 
     @IntentMethod("OneActivity_TwoActivity")
     public void jumpOneToTwoActivity() {
-        new OneActivity_TwoActivity().jumpEnterActivity(
-                OneActivity.this,title);
+//        new OneActivity_TwoActivity().jumpEnterActivity(
+//                OneActivity.this,title);
     }
 }
