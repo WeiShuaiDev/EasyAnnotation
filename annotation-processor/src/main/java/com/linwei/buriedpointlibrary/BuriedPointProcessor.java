@@ -19,6 +19,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+
 /**
  * @Author: LW
  * @Time: 2020/4/30
@@ -104,7 +105,7 @@ public class BuriedPointProcessor extends AbstractProcessor {
         for (Element element : elements) {
             //第三步：返回此元素定义的类型
             ElementKind kind = element.getKind();
-            messager.printMessage(Diagnostic.Kind.NOTE, "kind=" + kind );
+            messager.printMessage(Diagnostic.Kind.NOTE, "kind=" + kind);
             if (kind == ElementKind.CLASS) {
                 //判断该元素是否为类
                 typeElement = (TypeElement) element;
@@ -117,7 +118,7 @@ public class BuriedPointProcessor extends AbstractProcessor {
                 typeElement = (TypeElement) variableElement.getEnclosingElement();
                 String qualifiedName = typeElement.getQualifiedName().toString();
                 messager.printMessage(Diagnostic.Kind.NOTE, "Name=" + qualifiedName);
-            }else if(kind==ElementKind.METHOD){
+            } else if (kind == ElementKind.METHOD) {
                 executableElement = (ExecutableElement) element;
                 typeElement = (TypeElement) executableElement.getEnclosingElement();
                 String qualifiedName = typeElement.getQualifiedName().toString();

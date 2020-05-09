@@ -38,7 +38,7 @@ public class RuntimeParser {
      * 使用到构造注解，该方法只打印了 Method类型的注解
      */
     public static void  parseConstructAnnotation(){
-        //获取改类所有构造对象
+        //获取该类所有构造对象
         Constructor[] constructors =RuntimePoint.class.getDeclaredConstructors();
         for(Constructor constructor:constructors){
             //判断该构造对象是否存在@Point注解

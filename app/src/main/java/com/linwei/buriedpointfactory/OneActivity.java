@@ -1,20 +1,22 @@
 package com.linwei.buriedpointfactory;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
+
 import com.linwei.annotation.IntentField;
 import com.linwei.annotation.IntentMethod;
 
 public class OneActivity extends AppCompatActivity {
 
-    @IntentField("OneActivity_MainActivity")
+    @IntentField("MainActivity")
     String name = "Activity";
 
-    @IntentField("OneActivity_MainActivity")
+    @IntentField("MainActivity")
     int count = 0;
 
-    @IntentField("OneActivity_TwoActivity")
+    @IntentField("TwoActivity")
     String title = "OneActivity";
 
     @Override
@@ -23,9 +25,9 @@ public class OneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_one);
     }
 
-    public void click(View view){
+    public void click(View view) {
         int id = view.getId();
-        switch (id){
+        switch (id) {
             case R.id.mBtOneMain:
                 jumpOneToMainActivity();
                 break;
@@ -35,15 +37,13 @@ public class OneActivity extends AppCompatActivity {
         }
     }
 
-    @IntentMethod("OneActivity_MainActivity")
+    @IntentMethod("MainActivity")
     public void jumpOneToMainActivity() {
-//        new OneActivity_MainActivity().jumpEnterActivity(
-//                OneActivity.this,name,count);
+        new MainActivity$Jump().jumpActivity(OneActivity.this, name, count);
     }
 
-    @IntentMethod("OneActivity_TwoActivity")
+    @IntentMethod("TwoActivity")
     public void jumpOneToTwoActivity() {
-//        new OneActivity_TwoActivity().jumpEnterActivity(
-//                OneActivity.this,title);
+        new TwoActivity$Jump().jumpActivity(OneActivity.this, title);
     }
 }

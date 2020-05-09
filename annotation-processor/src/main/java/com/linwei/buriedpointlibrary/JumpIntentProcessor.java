@@ -1,5 +1,6 @@
 package com.linwei.buriedpointlibrary;
 
+import com.google.auto.service.AutoService;
 import com.linwei.annotation.IntentMethod;
 import com.linwei.annotation.IntentField;
 import com.linwei.buriedpointlibrary.template.ActivityEnterGenerator;
@@ -23,13 +24,11 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
-
 /**
  * @Author: LW
  * @Time: 2020/4/30
  * @Description: Activity跳转注解处理器
  */
-//@AutoService(javax.annotation.processing.Processor.class)
 public class JumpIntentProcessor extends AbstractProcessor {
     private ProcessorUtils mProcessorUtils;
 
@@ -60,7 +59,7 @@ public class JumpIntentProcessor extends AbstractProcessor {
      */
     private void initGenerated() {
         mGenerators.add(new ActivityEnterGenerator());
-//        mGenerators.add(new ActivityOutGenerator());
+        mGenerators.add(new ActivityOutGenerator());
     }
 
     @Override
@@ -139,6 +138,6 @@ public class JumpIntentProcessor extends AbstractProcessor {
      */
     @Override
     public SourceVersion getSupportedSourceVersion() {
-        return super.getSupportedSourceVersion();
+        return SourceVersion.RELEASE_7;
     }
 }

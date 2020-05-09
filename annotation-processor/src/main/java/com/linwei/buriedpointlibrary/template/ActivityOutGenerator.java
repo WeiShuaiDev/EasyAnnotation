@@ -32,11 +32,10 @@ public class ActivityOutGenerator implements Generator {
                           ExecutableElement executableElement,
                           ProcessorUtils processorUtils,
                           ProcessingEnvironment processingEnv) {
-        System.out.println("ActivityOutGenerator");
         //存储成员变量信息
         ArrayList<FieldSpec> listField = new ArrayList<>();
 
-        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_OUT_ACTIVITY)
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_INIT_ACTIVITY)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(Object.class);
 
@@ -48,13 +47,12 @@ public class ActivityOutGenerator implements Generator {
             );
         }
         //获取目标对象
-        String next = clazzType.substring(clazzType.lastIndexOf("_") + 1);
 
-        methodBuilder.addParameter(Object.class,"activity");
-        methodBuilder.addStatement(next+" nextActivity = ("+next+") activity");
+        methodBuilder.addParameter(Object.class, "activity");
+        methodBuilder.addStatement(clazzType + " nextActivity = (" + clazzType + ") activity");
         methodBuilder.addStatement("android.content.Intent intent=nextActivity.getIntent()");
 
-        for(VariableElement element :variableElements){
+        for (VariableElement element : variableElements) {
             //Element 只是一种语言元素，本身并不包含信息，所以我们这里获取TypeMirror
             TypeMirror typeMirror = element.asType();
             //获取注解字段变量类型
@@ -64,27 +62,27 @@ public class ActivityOutGenerator implements Generator {
             //注解类型转换为Intent传输类型
             String intentTypeName = processorUtils.getIntentTypeName(typeName.toString());
             //创建成员变量
-            FieldSpec fieldSpec = FieldSpec.builder(typeName,fieldName)
+            FieldSpec fieldSpec = FieldSpec.builder(typeName, fieldName)
                     .addModifiers(Modifier.PUBLIC)
                     .build();
             listField.add(fieldSpec);
 
-            if(processorUtils.isElementNoDefaultValue(typeName.toString())){
-                methodBuilder.addStatement("this."+fieldName+"=intent.get"+intentTypeName+"Extra(\""+fieldName+"\")");
-            }else{
-                if(intentTypeName==null){
+            if (processorUtils.isElementNoDefaultValue(typeName.toString())) {
+                methodBuilder.addStatement("this." + fieldName + "=intent.get" + intentTypeName + "Extra(\"" + fieldName + "\")");
+            } else {
+                if (intentTypeName == null) {
                     processingEnv.getMessager().printMessage(
                             Diagnostic.Kind.ERROR,
                             "the type:" + element.asType().toString() + " is not support"
                     );
-                }else{
-                    String defaultValue="default"+fieldName;
-                    if("".equals(intentTypeName)){
+                } else {
+                    String defaultValue = "default" + fieldName;
+                    if ("".equals(intentTypeName)) {
                         //序列化数据获取
-                        methodBuilder.addStatement("this."+fieldName+"=("+typeName+")intent.getSerializableExtra(\"" + fieldName + "\")");
-                    }else{
-                        methodBuilder.addParameter(typeName,defaultValue);
-                        methodBuilder.addStatement("this."+ fieldName +"= intent.get"
+                        methodBuilder.addStatement("this." + fieldName + "=(" + typeName + ")intent.getSerializableExtra(\"" + fieldName + "\")");
+                    } else {
+                        methodBuilder.addParameter(typeName, defaultValue);
+                        methodBuilder.addStatement("this." + fieldName + "= intent.get"
                                 + intentTypeName + "Extra(\"" + fieldName + "\", " + defaultValue + ")");
                     }
                 }
@@ -95,7 +93,7 @@ public class ActivityOutGenerator implements Generator {
         TypeElement typeElement = (TypeElement)
                 executableElement.getEnclosingElement();
 
-        processorUtils.writeToFile(clazzType,
+        processorUtils.writeToFile(clazzType + Constant.INIT_SUFFIX,
                 processorUtils.getPackageName(typeElement),
                 methodBuilder.build(), processingEnv, listField);
     }

@@ -35,8 +35,7 @@ public class ActivityEnterGenerator implements Generator {
                           ExecutableElement executableElement,
                           ProcessorUtils processorUtils,
                           ProcessingEnvironment processingEnv) {
-        System.out.println("ActivityEnterGenerator");
-        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_ENTER_ACTIVITY)
+        MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_JUMP_ACTIVITY)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(void.class);
 
@@ -63,16 +62,15 @@ public class ActivityEnterGenerator implements Generator {
             );
         }
 
-        String clazz = clazzType.substring(clazzType.lastIndexOf("_")+1);
 
-        methodBuilder.addStatement("intent.setClass((android.content.Context)context, " + clazz + ".class)");
+        methodBuilder.addStatement("intent.setClass((android.content.Context)context, " + clazzType + ".class)");
         methodBuilder.addStatement("((android.content.Context)context).startActivity(intent)");
 
 
         TypeElement typeElement = (TypeElement)
                 executableElement.getEnclosingElement();
 
-        processorUtils.writeToFile(clazzType,
+        processorUtils.writeToFile(clazzType + Constant.JUMP_SUFFIX,
                 processorUtils.getPackageName(typeElement),
                 methodBuilder.build(), processingEnv, null);
 

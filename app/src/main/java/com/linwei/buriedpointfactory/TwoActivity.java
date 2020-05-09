@@ -19,10 +19,11 @@ public class TwoActivity extends AppCompatActivity {
      * 获取数据
      */
     private void initData() {
-//        OneActivity_TwoActivity activity =
-//                (OneActivity_TwoActivity) new OneActivity_TwoActivity().jumpOutActivity(this);
-//        String title = activity.title;
-//        Toast.makeText(this,title,
-//                Toast.LENGTH_LONG).show();
+        TwoActivity$Init activity = (TwoActivity$Init)
+                new TwoActivity$Init().initActivity(this);
+        String title = activity.title;
+        Toast.makeText(this, title,
+                Toast.LENGTH_LONG).show();
+
     }
 }
