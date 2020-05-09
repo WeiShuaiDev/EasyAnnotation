@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.linwei.buriedpointfactory.bean.UserInfo;
+
 public class TwoActivity extends AppCompatActivity {
 
     @Override
@@ -22,7 +24,9 @@ public class TwoActivity extends AppCompatActivity {
         TwoActivity$Init activity = (TwoActivity$Init)
                 new TwoActivity$Init().initActivity(this);
         String title = activity.title;
-        Toast.makeText(this, title,
+        UserInfo userInfo = activity.userInfo;
+        Toast.makeText(this, "title=" + title + ";username=" +
+                        userInfo.username + ";password" + userInfo.password,
                 Toast.LENGTH_LONG).show();
 
     }

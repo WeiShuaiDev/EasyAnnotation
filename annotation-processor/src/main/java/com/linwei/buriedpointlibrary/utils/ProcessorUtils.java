@@ -15,7 +15,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
 /**
- * @Author: LW
+ * @Author: WS
  * @Time: 2020/4/30
  * @Description: 注解处理器工具类
  */

@@ -21,7 +21,7 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
 /**
- * @Author: LW
+ * @Author: WS
  * @Time: 2020/4/30
  * @Description: 埋点注解处理器
  */

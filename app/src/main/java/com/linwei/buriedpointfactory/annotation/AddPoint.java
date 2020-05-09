@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Author: weiyun
+ * @Author: WS
  * @Time: 2020/4/27
  * @Description: 增加埋点注解
  */

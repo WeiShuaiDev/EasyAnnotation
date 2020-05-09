@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.linwei.annotation.IntentField;
 import com.linwei.annotation.IntentMethod;
+import com.linwei.buriedpointfactory.bean.UserInfo;
 
 public class OneActivity extends AppCompatActivity {
 
@@ -18,6 +19,9 @@ public class OneActivity extends AppCompatActivity {
 
     @IntentField("TwoActivity")
     String title = "OneActivity";
+
+    @IntentField("TwoActivity")
+    UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class OneActivity extends AppCompatActivity {
 
     @IntentMethod("TwoActivity")
     public void jumpOneToTwoActivity() {
-        new TwoActivity$Jump().jumpActivity(OneActivity.this, title);
+        userInfo = new UserInfo("username", "password");
+        new TwoActivity$Jump().jumpActivity(OneActivity.this, title, userInfo);
     }
 }

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Author: LW
+ * @Author: WS
  * @Time: 2020/4/30
  * @Description: 界面跳转方法标识注解
  */

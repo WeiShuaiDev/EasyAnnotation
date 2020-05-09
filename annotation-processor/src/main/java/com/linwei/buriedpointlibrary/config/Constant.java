@@ -1,7 +1,7 @@
 package com.linwei.buriedpointlibrary.config;
 
 /**
- * @Author: LW
+ * @Author: WS
  * @Time: 2020/4/30
  * @Description: 常量配置
  */

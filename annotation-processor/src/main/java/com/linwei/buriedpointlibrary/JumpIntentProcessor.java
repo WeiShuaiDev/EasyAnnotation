@@ -1,8 +1,8 @@
 package com.linwei.buriedpointlibrary;
 
-import com.google.auto.service.AutoService;
 import com.linwei.annotation.IntentMethod;
 import com.linwei.annotation.IntentField;
+import com.linwei.annotation.Pass;
 import com.linwei.buriedpointlibrary.template.ActivityEnterGenerator;
 import com.linwei.buriedpointlibrary.template.ActivityOutGenerator;
 import com.linwei.buriedpointlibrary.template.Generator;
@@ -23,9 +23,11 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
+
 /**
- * @Author: LW
+ * @Author: WS
  * @Time: 2020/4/30
  * @Description: Activity跳转注解处理器
  */
@@ -64,11 +66,16 @@ public class JumpIntentProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        //获取IntentMethod跳转方法所有注解信息
         Set<? extends Element> methodElement = roundEnv.getElementsAnnotatedWith(IntentMethod.class);
+        //获取IntentField跳转成员变量所有注解信息
         Set<? extends Element> fieldElement = roundEnv.getElementsAnnotatedWith(IntentField.class);
+        //获取Pass跳转传参变量所有注解信息
+        Set<? extends Element> PassElement = roundEnv.getElementsAnnotatedWith(Pass.class);
 
         ExecutableElement executableElement = null;
         VariableElement variableElement = null;
+        TypeParameterElement typeParameterElement = null;
         String methodValue = "";
 
         for (Element method : methodElement) {
@@ -103,6 +110,12 @@ public class JumpIntentProcessor extends AbstractProcessor {
                             //IntentField是应用在一般成员变量上的注解
                             mVariableElementLists.get(methodValue).add((VariableElement) field);
                         }
+                    }
+                }
+                for (Element pass : PassElement) {
+                    ElementKind passKind = pass.getKind();
+                    if (passKind == ElementKind.PARAMETER) {
+                        typeParameterElement = (TypeParameterElement) pass;
                     }
                 }
             }

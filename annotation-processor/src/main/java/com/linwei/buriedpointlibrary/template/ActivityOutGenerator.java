@@ -20,7 +20,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
 /**
- * @Author: LW
+ * @Author: WS
  * @Time: 2020/5/4
  * @Description: Activity跳转终点模板生成
  */
