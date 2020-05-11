@@ -2,12 +2,13 @@ package com.linwei.buriedpointlibrary;
 
 import com.linwei.annotation.IntentMethod;
 import com.linwei.annotation.IntentField;
-import com.linwei.annotation.Pass;
+import com.linwei.annotation.IntentParameter;
 import com.linwei.buriedpointlibrary.template.ActivityEnterGenerator;
 import com.linwei.buriedpointlibrary.template.ActivityOutGenerator;
 import com.linwei.buriedpointlibrary.template.Generator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
+import java.lang.annotation.ElementType;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -19,6 +20,7 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -70,8 +72,6 @@ public class JumpIntentProcessor extends AbstractProcessor {
         Set<? extends Element> methodElement = roundEnv.getElementsAnnotatedWith(IntentMethod.class);
         //获取IntentField跳转成员变量所有注解信息
         Set<? extends Element> fieldElement = roundEnv.getElementsAnnotatedWith(IntentField.class);
-        //获取Pass跳转传参变量所有注解信息
-        Set<? extends Element> PassElement = roundEnv.getElementsAnnotatedWith(Pass.class);
 
         ExecutableElement executableElement = null;
         VariableElement variableElement = null;
@@ -97,26 +97,13 @@ public class JumpIntentProcessor extends AbstractProcessor {
 
                 mExecutableElementLists.put(methodValue, executableElement);
 
-                for (Element field : fieldElement) {
-                    ElementKind fieldKind = field.getKind();
-                    if (fieldKind == ElementKind.FIELD) {
-                        //判断Elements类型，并获取Filed参数值
-                        variableElement = (VariableElement) field;
-                        String filedValue = variableElement.getAnnotation(IntentField.class).value();
 
-                        if (!mProcessorUtils.isNotEmpty(filedValue)) continue;
+                //获取对应标识中成员变量注解信息,并进行判断
+                loadFieldAnnotation(fieldElement, methodValue);
 
-                        if (filedValue.equals(methodValue)) {
-                            //IntentField是应用在一般成员变量上的注解
-                            mVariableElementLists.get(methodValue).add((VariableElement) field);
-                        }
-                    }
-                }
-                for (Element pass : PassElement) {
-                    ElementKind passKind = pass.getKind();
-                    if (passKind == ElementKind.PARAMETER) {
-                        typeParameterElement = (TypeParameterElement) pass;
-                    }
+                if (mVariableElementLists.get(methodValue).size() <= 0) {
+                    //获取对应标识方法参数注解信息,并进行判断
+                    loanParameterAnnotation(executableElement, methodValue);
                 }
             }
         }
@@ -131,6 +118,53 @@ public class JumpIntentProcessor extends AbstractProcessor {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取对应标识方法参数注解信息,并进行判断
+     *
+     * @param executableElement
+     * @param methodValue
+     */
+    private void loanParameterAnnotation(ExecutableElement executableElement, String methodValue) {
+        List<? extends VariableElement> parameterElement = executableElement.getParameters();
+        for (Element parameter : parameterElement) {
+            IntentParameter intentParameter = parameter.getAnnotation(IntentParameter.class);
+            if (intentParameter != null) {
+                String parameterValue = intentParameter.value();
+                if (!mProcessorUtils.isNotEmpty(parameterValue)) continue;
+                //方法同一标识判断
+                if (parameterValue.equals(methodValue)) {
+                    //IntentField是应用在一般成员变量上的注解
+                    mVariableElementLists.get(methodValue).add((VariableElement) parameter);
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取对应标识中成员变量注解信息,并进行判断
+     *
+     * @param fieldElement
+     * @param methodValue
+     */
+    private void loadFieldAnnotation(Set<? extends Element> fieldElement, String methodValue) {
+        VariableElement variableElement;
+        for (Element field : fieldElement) {
+            ElementKind fieldKind = field.getKind();
+            if (fieldKind == ElementKind.FIELD) {
+                //判断Elements类型，并获取Filed参数值
+                variableElement = (VariableElement) field;
+                String filedValue = variableElement.getAnnotation(IntentField.class).value();
+
+                if (!mProcessorUtils.isNotEmpty(filedValue)) continue;
+                //方法同一标识判断
+                if (filedValue.equals(methodValue)) {
+                    //IntentField是应用在一般成员变量上的注解
+                    mVariableElementLists.get(methodValue).add((VariableElement) field);
+                }
+            }
+        }
     }
 
     /**

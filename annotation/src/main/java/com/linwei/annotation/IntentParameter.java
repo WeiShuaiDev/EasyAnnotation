@@ -12,5 +12,11 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.PARAMETER)
-public @interface Pass {
+public @interface IntentParameter {
+    /**
+     * 目标对象标识,如{{@code MainActivity}}
+     *
+     * @return
+     */
+    String value() default "";
 }

@@ -7,14 +7,15 @@ import android.view.View;
 
 import com.linwei.annotation.IntentField;
 import com.linwei.annotation.IntentMethod;
+import com.linwei.annotation.IntentParameter;
 import com.linwei.buriedpointfactory.bean.UserInfo;
 
 public class OneActivity extends AppCompatActivity {
 
-    @IntentField("MainActivity")
+    //@IntentField("MainActivity")
     String name = "Activity";
 
-    @IntentField("MainActivity")
+    //@IntentField("MainActivity")
     int count = 0;
 
     @IntentField("TwoActivity")
@@ -33,7 +34,7 @@ public class OneActivity extends AppCompatActivity {
         int id = view.getId();
         switch (id) {
             case R.id.mBtOneMain:
-                jumpOneToMainActivity();
+                jumpOneToMainActivity(name, count, "title");
                 break;
             case R.id.mBtOneTwo:
                 jumpOneToTwoActivity();
@@ -42,7 +43,9 @@ public class OneActivity extends AppCompatActivity {
     }
 
     @IntentMethod("MainActivity")
-    public void jumpOneToMainActivity() {
+    public void jumpOneToMainActivity(@IntentParameter("MainActivity") String name,
+                                      @IntentParameter("MainActivity") int count,
+                                      String title) {
         new MainActivity$Jump().jumpActivity(OneActivity.this, name, count);
     }
 
