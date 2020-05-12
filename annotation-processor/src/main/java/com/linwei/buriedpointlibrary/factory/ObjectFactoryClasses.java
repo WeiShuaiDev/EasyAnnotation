@@ -14,14 +14,14 @@ public class ObjectFactoryClasses {
     private String mQualifiedName;
     private String mSimpleName;
     private String mKey;
-    private String mObjectName;
+    private String mObject;
 
     public ObjectFactoryClasses(TypeElement typeElement) {
         this.mTypeElement = typeElement;
 
         ObjectFactory factory = mTypeElement.getAnnotation(ObjectFactory.class);
         this.mKey = factory.key();
-        this.mObjectName = factory.objectName();
+        this.mObject = factory.object();
 
         if (!"".equals(mKey)) {
             throw new IllegalArgumentException(
@@ -77,8 +77,8 @@ public class ObjectFactoryClasses {
         return mKey;
     }
 
-    public String getObjectName() {
-        return mObjectName;
+    public String getObject() {
+        return mObject;
     }
 
 }

@@ -7,7 +7,7 @@ package com.linwei.annotation;
  */
 public @interface ObjectFactory {
 
-    String objectName(); //生成类名
+    String object(); //生成类名
 
     String key();  //标识
 }
