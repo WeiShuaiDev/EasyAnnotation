@@ -1,11 +1,10 @@
-package com.linwei.buriedpointfactory;
+package com.linwei.annotation;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-import com.linwei.annotation.Point;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void click(View v) {
         try {
-            //RuntimeParser.parseTypeAnnotation("com.weiyun.buriedpointfactory.runtime.RuntimePoint");
+            //RuntimeParser.parseTypeAnnotation("com.weiyun.annotation.runtime.RuntimePoint");
             // RuntimeParser.parseMethodAnnotation();
             //RuntimeParser.parseConstructAnnotation();
         } catch (Exception e) {

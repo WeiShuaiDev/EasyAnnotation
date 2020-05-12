@@ -1,12 +1,11 @@
-package com.linwei.buriedpointfactory;
+package com.linwei.annotation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.linwei.buriedpointfactory.bean.UserInfo;
+import com.linwei.annotation.bean.UserInfo;
 
 public class TwoActivity extends AppCompatActivity {
 

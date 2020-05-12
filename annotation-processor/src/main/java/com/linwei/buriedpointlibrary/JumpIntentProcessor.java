@@ -8,7 +8,6 @@ import com.linwei.buriedpointlibrary.template.ActivityOutGenerator;
 import com.linwei.buriedpointlibrary.template.Generator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
-import java.lang.annotation.ElementType;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -20,7 +19,6 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -74,8 +72,6 @@ public class JumpIntentProcessor extends AbstractProcessor {
         Set<? extends Element> fieldElement = roundEnv.getElementsAnnotatedWith(IntentField.class);
 
         ExecutableElement executableElement = null;
-        VariableElement variableElement = null;
-        TypeParameterElement typeParameterElement = null;
         String methodValue = "";
 
         for (Element method : methodElement) {
@@ -127,16 +123,18 @@ public class JumpIntentProcessor extends AbstractProcessor {
      * @param methodValue
      */
     private void loanParameterAnnotation(ExecutableElement executableElement, String methodValue) {
-        List<? extends VariableElement> parameterElement = executableElement.getParameters();
-        for (Element parameter : parameterElement) {
-            IntentParameter intentParameter = parameter.getAnnotation(IntentParameter.class);
-            if (intentParameter != null) {
-                String parameterValue = intentParameter.value();
-                if (!mProcessorUtils.isNotEmpty(parameterValue)) continue;
-                //方法同一标识判断
-                if (parameterValue.equals(methodValue)) {
-                    //IntentField是应用在一般成员变量上的注解
-                    mVariableElementLists.get(methodValue).add((VariableElement) parameter);
+        if (executableElement != null) {
+            List<? extends VariableElement> parameterElement = executableElement.getParameters();
+            for (Element parameter : parameterElement) {
+                IntentParameter intentParameter = parameter.getAnnotation(IntentParameter.class);
+                if (intentParameter != null) {
+                    String parameterValue = intentParameter.value();
+                    if (!mProcessorUtils.isNotEmpty(parameterValue)) continue;
+                    //方法同一标识判断
+                    if (parameterValue.equals(methodValue)) {
+                        //IntentField是应用在一般成员变量上的注解
+                        mVariableElementLists.get(methodValue).add((VariableElement) parameter);
+                    }
                 }
             }
         }
@@ -149,19 +147,21 @@ public class JumpIntentProcessor extends AbstractProcessor {
      * @param methodValue
      */
     private void loadFieldAnnotation(Set<? extends Element> fieldElement, String methodValue) {
-        VariableElement variableElement;
-        for (Element field : fieldElement) {
-            ElementKind fieldKind = field.getKind();
-            if (fieldKind == ElementKind.FIELD) {
-                //判断Elements类型，并获取Filed参数值
-                variableElement = (VariableElement) field;
-                String filedValue = variableElement.getAnnotation(IntentField.class).value();
+        if (fieldElement != null && fieldElement.size() > 0) {
+            VariableElement variableElement;
+            for (Element field : fieldElement) {
+                ElementKind fieldKind = field.getKind();
+                if (fieldKind == ElementKind.FIELD) {
+                    //判断Elements类型，并获取Filed参数值
+                    variableElement = (VariableElement) field;
+                    String filedValue = variableElement.getAnnotation(IntentField.class).value();
 
-                if (!mProcessorUtils.isNotEmpty(filedValue)) continue;
-                //方法同一标识判断
-                if (filedValue.equals(methodValue)) {
-                    //IntentField是应用在一般成员变量上的注解
-                    mVariableElementLists.get(methodValue).add((VariableElement) field);
+                    if (!mProcessorUtils.isNotEmpty(filedValue)) continue;
+                    //方法同一标识判断
+                    if (filedValue.equals(methodValue)) {
+                        //IntentField是应用在一般成员变量上的注解
+                        mVariableElementLists.get(methodValue).add((VariableElement) field);
+                    }
                 }
             }
         }

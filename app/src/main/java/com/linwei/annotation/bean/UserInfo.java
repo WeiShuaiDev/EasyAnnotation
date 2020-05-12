@@ -1,4 +1,4 @@
-package com.linwei.buriedpointfactory.bean;
+package com.linwei.annotation.bean;
 
 import java.io.Serializable;
 

@@ -1,14 +1,11 @@
-package com.linwei.buriedpointfactory;
+package com.linwei.annotation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 
-import com.linwei.annotation.IntentField;
-import com.linwei.annotation.IntentMethod;
-import com.linwei.annotation.IntentParameter;
-import com.linwei.buriedpointfactory.bean.UserInfo;
+import com.linwei.annotation.bean.UserInfo;
 
 public class OneActivity extends AppCompatActivity {
 

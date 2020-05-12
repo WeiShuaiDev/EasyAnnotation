@@ -1,8 +1,8 @@
-package com.linwei.buriedpointfactory.runtime;
+package com.linwei.annotation.runtime;
 
 import android.text.TextUtils;
 
-import com.linwei.buriedpointfactory.annotation.AddPoint;
+import com.linwei.annotation.annotation.AddPoint;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

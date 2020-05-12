@@ -1,4 +1,4 @@
-rootProject.name='BuriedPointFactory'
+rootProject.name='AnnotationTools'
 include ':app'
 include ':annotation-processor'
 include ':annotation'

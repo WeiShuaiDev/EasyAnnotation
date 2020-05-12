@@ -1,7 +1,7 @@
-package com.linwei.buriedpointfactory.runtime;
+package com.linwei.annotation.runtime;
 
-import com.linwei.buriedpointfactory.R;
-import com.linwei.buriedpointfactory.annotation.AddPoint;
+import com.linwei.annotation.R;
+import com.linwei.annotation.annotation.AddPoint;
 
 /**
  * @Author: WS
