@@ -28,7 +28,7 @@ import javax.tools.Diagnostic;
 //@SupportedAnnotationTypes({"com.linwei.buriedpointlibrary.Point"})
 //@AutoService(javax.annotation.processing.Processor.class)
 //@SupportedSourceVersion(SourceVersion.RELEASE_7)
-public class BuriedPointProcessor extends AbstractProcessor {
+public class CaseProcessor extends AbstractProcessor {
     /**
      * 做一些初始化工作，注释处理工具框架调用了这个方法，
      * 当我们使用这个方法的时候会给我们传递一个 ProcessingEnvironment

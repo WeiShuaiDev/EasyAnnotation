@@ -45,15 +45,16 @@ public class JumpIntentProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        initProcessorUtils();
+        initProcessorUtils(processingEnv);
         initGenerated();
     }
 
     /**
      * 初始化ProcessorUtils工具
+     * @param processingEnv
      */
-    private void initProcessorUtils() {
-        mProcessorUtils = ProcessorUtils.getInstance();
+    private void initProcessorUtils(ProcessingEnvironment processingEnv) {
+        mProcessorUtils = ProcessorUtils.getInstance(processingEnv);
     }
 
     /**

@@ -10,9 +10,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
+import javax.tools.Diagnostic;
 
 /**
  * @Author: WS
@@ -21,18 +26,116 @@ import javax.lang.model.element.Modifier;
  */
 public class ProcessorUtils {
 
+    private ProcessingEnvironment mProcessingEnv;
+    private static ProcessorUtils mProcessorUtils = null;
+
     private static Set<String> supportTypes = new HashSet<>();
 
-    private ProcessorUtils() {
+    private ProcessorUtils(ProcessingEnvironment env) {
+        this.mProcessingEnv = env;
         initDefaultData();
     }
 
-    public static ProcessorUtils getInstance() {
-        return ProcessorHolder.processor;
+    public static ProcessorUtils getInstance(ProcessingEnvironment env) {
+        if (mProcessorUtils == null) {
+            synchronized (ProcessorUtils.class) {
+                if (mProcessorUtils == null) {
+                    mProcessorUtils = new ProcessorUtils(env);
+                }
+            }
+        }
+        return mProcessorUtils;
     }
 
-    private static class ProcessorHolder {
-        private static final ProcessorUtils processor = new ProcessorUtils();
+    /**
+     * Types工具类
+     *
+     * @return
+     */
+    public Types processorTypeUtils() {
+        return mProcessingEnv.getTypeUtils();
+    }
+
+    /**
+     * Element工具类
+     *
+     * @return
+     */
+    public Elements processorElementUtils() {
+        return mProcessingEnv.getElementUtils();
+    }
+
+    /**
+     * Filer工具
+     *
+     * @return
+     */
+    public Filer processorFiler() {
+        return mProcessingEnv.getFiler();
+    }
+
+    /**
+     * 日志对象
+     *
+     * @return
+     */
+    private Messager processorMessage() {
+        return mProcessingEnv.getMessager();
+    }
+
+    /**
+     * 错误日志
+     *
+     * @param msg
+     * @param args
+     */
+    public void eLog(String msg, Object... args) {
+        LogMessage(Diagnostic.Kind.ERROR, msg, args);
+    }
+
+    /**
+     * 警告日志
+     *
+     * @param msg
+     * @param args
+     */
+    public void wLog(String msg, Object... args) {
+        LogMessage(Diagnostic.Kind.WARNING, msg, args);
+    }
+
+    /**
+     * 强制警告日志
+     *
+     * @param msg
+     * @param args
+     */
+    public void mwLog(String msg, Object... args) {
+        LogMessage(Diagnostic.Kind.MANDATORY_WARNING, msg, args);
+    }
+
+    /**
+     * 注意日志
+     *
+     * @param msg
+     * @param args
+     */
+    public void nLog(String msg, Object... args) {
+        LogMessage(Diagnostic.Kind.NOTE, msg, args);
+    }
+
+
+    /**
+     * 日志输出
+     *
+     * @param kind
+     * @param msg
+     * @param args
+     */
+    private void LogMessage(Diagnostic.Kind kind, String msg, Object... args) {
+        Messager messager = processorMessage();
+        if (messager != null) {
+            messager.printMessage(kind, String.format(msg, args));
+        }
     }
 
     /**

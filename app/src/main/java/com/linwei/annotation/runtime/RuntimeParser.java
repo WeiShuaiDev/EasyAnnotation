@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  * @Time: 2020/4/27
  * @Description: 运行时解析器
  */
-public class RuntimeParser {
+public class  RuntimeParser {
     /**
      * 使用到类注解 该方法只打印了 Type 类型的注解
      *
