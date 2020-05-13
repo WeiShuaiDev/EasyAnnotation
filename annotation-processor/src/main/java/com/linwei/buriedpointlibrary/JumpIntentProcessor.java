@@ -3,9 +3,9 @@ package com.linwei.buriedpointlibrary;
 import com.linwei.annotation.IntentMethod;
 import com.linwei.annotation.IntentField;
 import com.linwei.annotation.IntentParameter;
-import com.linwei.buriedpointlibrary.template.activity.ActivityEnterGenerator;
-import com.linwei.buriedpointlibrary.template.activity.ActivityOutGenerator;
-import com.linwei.buriedpointlibrary.template.activity.ActivityGenerator;
+import com.linwei.buriedpointlibrary.template.intent.ActivityEnterGenerator;
+import com.linwei.buriedpointlibrary.template.intent.ActivityOutGenerator;
+import com.linwei.buriedpointlibrary.template.intent.ActivityGenerator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
 import java.util.HashMap;
@@ -50,6 +50,7 @@ public class JumpIntentProcessor extends AbstractProcessor {
 
     /**
      * 初始化ProcessorUtils工具
+     *
      * @param processingEnv
      */
     private void initProcessorUtils(ProcessingEnvironment processingEnv) {
@@ -63,6 +64,7 @@ public class JumpIntentProcessor extends AbstractProcessor {
         mGenerators.add(new ActivityEnterGenerator());
         mGenerators.add(new ActivityOutGenerator());
     }
+
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -113,6 +115,9 @@ public class JumpIntentProcessor extends AbstractProcessor {
                         executableElement, mProcessorUtils, processingEnv);
             }
         }
+        //process()多次调用处理，所以配置信息及时释放
+        mVariableElementLists.clear();
+        mExecutableElementLists.clear();
         return false;
     }
 

@@ -3,8 +3,6 @@ package com.linwei.buriedpointlibrary.template.object;
 import com.linwei.buriedpointlibrary.factory.ObjectFactoryGroupedClasses;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
-import java.util.HashMap;
-
 import javax.annotation.processing.ProcessingEnvironment;
 
 /**
@@ -13,7 +11,6 @@ import javax.annotation.processing.ProcessingEnvironment;
  * @Description: Object对象生成模板类
  */
 public interface ObjectGenerator {
-
 
     /**
      * 根据{@link ObjectFactoryGroupedClasses} 配置，生产对象工厂类

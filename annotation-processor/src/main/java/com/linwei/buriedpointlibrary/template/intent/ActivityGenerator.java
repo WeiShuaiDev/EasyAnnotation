@@ -1,4 +1,4 @@
-package com.linwei.buriedpointlibrary.template.activity;
+package com.linwei.buriedpointlibrary.template.intent;
 
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 

@@ -86,6 +86,8 @@ public class ObjectFactoryProcessor extends AbstractProcessor {
             for (String objects : mGroupedClassesMap.keySet()) {
                 mGenerator.generator(objects, mGroupedClassesMap.get(objects), mProcessorUtils, processingEnv);
             }
+            //process()多次调用处理，所以配置信息及时释放
+            mGroupedClassesMap.clear();
         } catch (Exception e) {
             mProcessorUtils.eLog(e.getMessage());
         }
