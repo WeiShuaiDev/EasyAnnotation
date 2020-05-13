@@ -3,9 +3,9 @@ package com.linwei.buriedpointlibrary;
 import com.linwei.annotation.IntentMethod;
 import com.linwei.annotation.IntentField;
 import com.linwei.annotation.IntentParameter;
-import com.linwei.buriedpointlibrary.template.ActivityEnterGenerator;
-import com.linwei.buriedpointlibrary.template.ActivityOutGenerator;
-import com.linwei.buriedpointlibrary.template.Generator;
+import com.linwei.buriedpointlibrary.template.activity.ActivityEnterGenerator;
+import com.linwei.buriedpointlibrary.template.activity.ActivityOutGenerator;
+import com.linwei.buriedpointlibrary.template.activity.ActivityGenerator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
 import java.util.HashMap;
@@ -23,7 +23,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
 
 /**
@@ -34,7 +33,7 @@ import javax.lang.model.element.VariableElement;
 public class JumpIntentProcessor extends AbstractProcessor {
     private ProcessorUtils mProcessorUtils;
 
-    private List<Generator> mGenerators = new LinkedList<>();
+    private List<ActivityGenerator> mGenerators = new LinkedList<>();
 
     //保存指定类型,所有VariableElement数据
     private Map<String, List<VariableElement>> mVariableElementLists = new HashMap<>();
@@ -109,7 +108,7 @@ public class JumpIntentProcessor extends AbstractProcessor {
         for (Map.Entry<String, List<VariableElement>> entry : mVariableElementLists.entrySet()) {
             if (!mProcessorUtils.isNotEmpty(entry.getKey())) continue;
             executableElement = mExecutableElementLists.get(entry.getKey());
-            for (Generator generator : mGenerators) {
+            for (ActivityGenerator generator : mGenerators) {
                 generator.generator(entry.getKey(), entry.getValue(),
                         executableElement, mProcessorUtils, processingEnv);
             }

@@ -1,9 +1,13 @@
 package com.linwei.buriedpointlibrary;
 
 import com.linwei.annotation.ObjectFactory;
+import com.linwei.buriedpointlibrary.exception.IdAlreadyUsedException;
 import com.linwei.buriedpointlibrary.factory.ObjectFactoryClasses;
+import com.linwei.buriedpointlibrary.factory.ObjectFactoryGroupedClasses;
+import com.linwei.buriedpointlibrary.template.object.ObjectFactoryGenerator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,11 +30,18 @@ import javax.lang.model.type.TypeMirror;
  */
 public class ObjectFactoryProcessor extends AbstractProcessor {
     private ProcessorUtils mProcessorUtils;
+    private LinkedHashMap<String, ObjectFactoryGroupedClasses> mGroupedClassesMap;
+    private ObjectFactoryGenerator mGenerator;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
+        //注解处理器工具类
         mProcessorUtils = ProcessorUtils.getInstance(processingEnv);
+        //根据ObjectFactory.object()类型，存储不同的子类
+        mGroupedClassesMap = new LinkedHashMap<>();
+        //生产模板对象
+        mGenerator = new ObjectFactoryGenerator();
     }
 
     @Override
@@ -38,14 +49,47 @@ public class ObjectFactoryProcessor extends AbstractProcessor {
         Set<? extends Element> factoryElements =
                 roundEnvironment.getElementsAnnotatedWith(ObjectFactory.class);
         for (Element element : factoryElements) {
-            ElementKind kind = element.getKind();
-            if (kind == ElementKind.CLASS) {
-                ObjectFactoryClasses classes = new ObjectFactoryClasses((TypeElement) element);
-                if (checkValidClass(classes)) {
+            ObjectFactoryClasses classes = null;
+            try {
+                ElementKind kind = element.getKind();
+                if (kind == ElementKind.CLASS) {
+                    classes = new ObjectFactoryClasses((TypeElement) element);
+                    if (!checkValidClass(classes)) {
+                        return true; //检查不符合要求，进行错误日志输出
+                    }
+
+                    ObjectFactoryGroupedClasses groupedClasses = mGroupedClassesMap.get(classes.getQualifiedName());
+                    if (groupedClasses == null) {
+                        groupedClasses = new ObjectFactoryGroupedClasses();
+                        mGroupedClassesMap.put(classes.getQualifiedName(), groupedClasses);
+                    }
+
+                    groupedClasses.addObjectFactoryClasses(classes);
 
                 }
+            } catch (IllegalArgumentException e) {
+                mProcessorUtils.eLog(e.getMessage());
+                return true;
+            } catch (IdAlreadyUsedException e) {
+                ObjectFactoryClasses existing = e.getExisting();
+                assert classes != null;
+                mProcessorUtils.eLog(
+                        "Conflict: The class %s is annotated with @%s with id ='%s' but %s already uses the same id",
+                        classes.getQualifiedName(), ObjectFactory.class.getSimpleName(),
+                        existing.getTypeElement().getQualifiedName().toString());
+                return true;
             }
         }
+
+        try {
+            //生成模板代码
+            for (String objects : mGroupedClassesMap.keySet()) {
+                mGenerator.generator(objects, mGroupedClassesMap.get(objects), mProcessorUtils, processingEnv);
+            }
+        } catch (Exception e) {
+            mProcessorUtils.eLog(e.getMessage());
+        }
+
         return true;
     }
 
@@ -72,17 +116,17 @@ public class ObjectFactoryProcessor extends AbstractProcessor {
         TypeElement typeElement = classes.getTypeElement();
 
         //检查该类限定符
-        if(!typeElement.getModifiers().contains(Modifier.PUBLIC)){
+        if (!typeElement.getModifiers().contains(Modifier.PUBLIC)) {
             mProcessorUtils.eLog("The class $s not public",
                     classes.getQualifiedName());
             return false;
         }
 
         //检查是否是一个抽象类
-        if(typeElement.getModifiers().contains(Modifier.ABSTRACT)){
+        if (typeElement.getModifiers().contains(Modifier.ABSTRACT)) {
             mProcessorUtils.eLog("The class $s is abstract," +
-                    "You can't annotate abstract classes with @%s",
-                    classes.getQualifiedName(),ObjectFactory.class.getSimpleName());
+                            "You can't annotate abstract classes with @%s",
+                    classes.getQualifiedName(), ObjectFactory.class.getSimpleName());
             return false;
         }
 
@@ -90,37 +134,37 @@ public class ObjectFactoryProcessor extends AbstractProcessor {
         TypeElement superTypeElement = mProcessorUtils.processorElementUtils().
                 getTypeElement(classes.getQualifiedName());
         //检查是否为接口类型
-        if(superTypeElement.getKind()==ElementKind.INTERFACE){
-            if(!typeElement.getInterfaces().contains(superTypeElement.asType())) {
+        if (superTypeElement.getKind() == ElementKind.INTERFACE) {
+            if (!typeElement.getInterfaces().contains(superTypeElement.asType())) {
                 mProcessorUtils.eLog("The class %s annotated with @%s must implement the interface %s",
                         typeElement.getQualifiedName().toString(), ObjectFactory.class.getSimpleName(),
                         classes.getQualifiedName());
                 return false;
-        }else{
-            TypeElement currentClass=typeElement;
-            while (true){
-                TypeMirror superclassType = currentClass.getSuperclass();
-                if(superclassType.getKind()== TypeKind.NONE){
-                    // 到达了基本类型(java.lang.Object), 所以退出
-                    mProcessorUtils.eLog("The class %s annotated with @%s must inherit from %s",
-                            typeElement.getQualifiedName().toString(), ObjectFactory.class.getSimpleName(),
-                            classes.getQualifiedName());
-                    return false;
-                }
+            } else {
+                TypeElement currentClass = typeElement;
+                while (true) {
+                    TypeMirror superclassType = currentClass.getSuperclass();
+                    if (superclassType.getKind() == TypeKind.NONE) {
+                        // 到达了基本类型(java.lang.Object), 所以退出
+                        mProcessorUtils.eLog("The class %s annotated with @%s must inherit from %s",
+                                typeElement.getQualifiedName().toString(), ObjectFactory.class.getSimpleName(),
+                                classes.getQualifiedName());
+                        return false;
+                    }
 
-                if(superclassType.toString().equals(classes.getQualifiedName())){
-                    break;
-                }
+                    if (superclassType.toString().equals(classes.getQualifiedName())) {
+                        break;
+                    }
 
-                currentClass = (TypeElement) mProcessorUtils.processorTypeUtils().asElement(superclassType);
-            }
+                    currentClass = (TypeElement) mProcessorUtils.processorTypeUtils().asElement(superclassType);
+                }
             }
         }
 
-        for(Element element:typeElement.getEnclosedElements()){
-            if(element.getKind()== ElementKind.CONSTRUCTOR){
+        for (Element element : typeElement.getEnclosedElements()) {
+            if (element.getKind() == ElementKind.CONSTRUCTOR) {
                 ExecutableElement constructorElement = (ExecutableElement) element;
-                if(constructorElement.getParameters().size() == 0&&constructorElement.getModifiers().contains(Modifier.PUBLIC)){
+                if (constructorElement.getParameters().size() == 0 && constructorElement.getModifiers().contains(Modifier.PUBLIC)) {
                     return true;
                 }
             }

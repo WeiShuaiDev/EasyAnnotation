@@ -35,4 +35,13 @@ public class ObjectFactoryGroupedClasses {
         return mObjectFactoryMaps.get(key);
     }
 
+    /**
+     * 获取注解信息
+     *
+     * @return
+     */
+    public LinkedHashMap<String, ObjectFactoryClasses> getObjectFactoryClassesMaps() {
+        return mObjectFactoryMaps;
+    }
+
 }

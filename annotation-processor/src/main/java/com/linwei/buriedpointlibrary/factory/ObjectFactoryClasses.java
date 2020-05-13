@@ -1,5 +1,7 @@
 package com.linwei.buriedpointlibrary.factory;
+
 import com.linwei.annotation.ObjectFactory;
+
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
@@ -14,23 +16,21 @@ public class ObjectFactoryClasses {
     private String mQualifiedName;
     private String mSimpleName;
     private String mKey;
-    private String mObject;
 
     public ObjectFactoryClasses(TypeElement typeElement) {
         this.mTypeElement = typeElement;
 
         ObjectFactory factory = mTypeElement.getAnnotation(ObjectFactory.class);
         this.mKey = factory.key();
-        this.mObject = factory.object();
 
-        if (!"".equals(mKey)) {
+        if ("".equals(mKey)) {
             throw new IllegalArgumentException(
                     String.format("key() in @%s for class %s is null or empty! that's not allowed",
                             ObjectFactory.class.getSimpleName(), mTypeElement.getQualifiedName().toString()));
         }
 
         try {
-            Class<?> clazz = factory.getClass();
+            Class<?> clazz = factory.type();
             mQualifiedName = clazz.getCanonicalName();
             mSimpleName = clazz.getSimpleName();
         } catch (MirroredTypeException mte) {
@@ -75,10 +75,6 @@ public class ObjectFactoryClasses {
      */
     public String getKey() {
         return mKey;
-    }
-
-    public String getObject() {
-        return mObject;
     }
 
 }

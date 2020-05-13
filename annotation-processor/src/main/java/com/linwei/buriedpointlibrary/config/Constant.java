@@ -10,7 +10,11 @@ public interface Constant {
 
     String METHOD_INIT_ACTIVITY = "initActivity";
 
+    String METHOD_FACTORY = "objectFactory";
+
     String JUMP_SUFFIX = "$Jump";
 
     String INIT_SUFFIX = "$Init";
+
+    String FACTORY_SUFFIX = "$Factory";
 }

@@ -1,4 +1,4 @@
-package com.linwei.buriedpointlibrary.template;
+package com.linwei.buriedpointlibrary.template.activity;
 
 import com.linwei.buriedpointlibrary.config.Constant;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
@@ -20,7 +20,7 @@ import javax.tools.Diagnostic;
  * @Time: 2020/4/30
  * @Description: Activity跳转起始模板生成
  */
-public class ActivityEnterGenerator implements Generator {
+public class ActivityEnterGenerator implements ActivityGenerator {
 
 
     /**

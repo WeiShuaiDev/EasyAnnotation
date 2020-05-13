@@ -1,5 +1,6 @@
 com.linwei.buriedpointlibrary.JumpIntentProcessor
 com.linwei.buriedpointlibrary.CaseProcessor
+com.linwei.buriedpointlibrary.ObjectFactoryProcessor
 
 
 

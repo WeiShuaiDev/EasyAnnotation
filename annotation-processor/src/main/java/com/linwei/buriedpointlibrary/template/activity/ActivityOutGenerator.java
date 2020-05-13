@@ -1,4 +1,4 @@
-package com.linwei.buriedpointlibrary.template;
+package com.linwei.buriedpointlibrary.template.activity;
 
 import com.linwei.buriedpointlibrary.config.Constant;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
@@ -6,14 +6,12 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
@@ -24,7 +22,7 @@ import javax.tools.Diagnostic;
  * @Time: 2020/5/4
  * @Description: Activity跳转终点模板生成
  */
-public class ActivityOutGenerator implements Generator {
+public class ActivityOutGenerator implements ActivityGenerator {
 
     @Override
     public void generator(String clazzType,
@@ -46,7 +44,6 @@ public class ActivityOutGenerator implements Generator {
                     "IntentClass注解定义不明确,无法进行界面跳转!"
             );
         }
-        //获取目标对象
 
         methodBuilder.addParameter(Object.class, "activity");
         methodBuilder.addStatement(clazzType + " nextActivity = (" + clazzType + ") activity");

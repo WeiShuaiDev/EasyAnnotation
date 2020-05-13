@@ -1,4 +1,4 @@
-package com.linwei.buriedpointlibrary.template;
+package com.linwei.buriedpointlibrary.template.activity;
 
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
@@ -11,9 +11,9 @@ import javax.lang.model.element.VariableElement;
 /**
  * @Author: WS
  * @Time: 2020/4/30
- * @Description: 生成模板代码接口
+ * @Description: Activity生成模板代码接口
  */
-public interface Generator {
+public interface ActivityGenerator {
 
     /**
      * 根据注解配置信息，{{@link VariableElement}}生成“样板”代码
