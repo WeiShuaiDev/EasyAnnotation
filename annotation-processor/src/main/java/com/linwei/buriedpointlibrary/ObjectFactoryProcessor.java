@@ -2,8 +2,8 @@ package com.linwei.buriedpointlibrary;
 
 import com.linwei.annotation.ObjectFactory;
 import com.linwei.buriedpointlibrary.exception.IdAlreadyUsedException;
-import com.linwei.buriedpointlibrary.factory.ObjectFactoryClasses;
-import com.linwei.buriedpointlibrary.factory.ObjectFactoryGroupedClasses;
+import com.linwei.buriedpointlibrary.logic.object.ObjectFactoryClasses;
+import com.linwei.buriedpointlibrary.logic.object.ObjectFactoryGroupedClasses;
 import com.linwei.buriedpointlibrary.template.object.ObjectFactoryGenerator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 

@@ -1,6 +1,6 @@
 package com.linwei.buriedpointlibrary.template.object;
 
-import com.linwei.buriedpointlibrary.factory.ObjectFactoryGroupedClasses;
+import com.linwei.buriedpointlibrary.logic.object.ObjectFactoryGroupedClasses;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 
 import javax.annotation.processing.ProcessingEnvironment;

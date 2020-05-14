@@ -1,6 +1,7 @@
-package com.linwei.buriedpointlibrary.factory;
+package com.linwei.buriedpointlibrary.logic.object;
 
 import com.linwei.buriedpointlibrary.exception.IdAlreadyUsedException;
+import com.linwei.buriedpointlibrary.logic.object.ObjectFactoryClasses;
 
 import java.util.LinkedHashMap;
 

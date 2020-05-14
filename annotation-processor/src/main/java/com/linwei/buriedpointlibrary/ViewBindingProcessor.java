@@ -12,6 +12,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
 /**
@@ -32,7 +33,14 @@ public class ViewBindingProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         Set<? extends Element> bindViewElement = roundEnvironment.getElementsAnnotatedWith(BindView.class);
-        Set<? extends Element> onClick = roundEnvironment.getElementsAnnotatedWith(OnClick.class);
+        Set<? extends Element> onClickElement = roundEnvironment.getElementsAnnotatedWith(OnClick.class);
+
+        for(Element element:bindViewElement){
+            ElementKind bindViewKind = element.getKind();
+            if(bindViewKind==ElementKind.FIELD){
+
+            }
+        }
 
         return false;
     }

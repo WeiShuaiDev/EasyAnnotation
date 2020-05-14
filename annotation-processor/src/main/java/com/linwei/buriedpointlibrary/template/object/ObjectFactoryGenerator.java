@@ -1,8 +1,8 @@
 package com.linwei.buriedpointlibrary.template.object;
 
 import com.linwei.buriedpointlibrary.config.Constant;
-import com.linwei.buriedpointlibrary.factory.ObjectFactoryClasses;
-import com.linwei.buriedpointlibrary.factory.ObjectFactoryGroupedClasses;
+import com.linwei.buriedpointlibrary.logic.object.ObjectFactoryClasses;
+import com.linwei.buriedpointlibrary.logic.object.ObjectFactoryGroupedClasses;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;

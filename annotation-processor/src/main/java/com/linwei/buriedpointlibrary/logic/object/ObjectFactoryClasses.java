@@ -1,4 +1,4 @@
-package com.linwei.buriedpointlibrary.factory;
+package com.linwei.buriedpointlibrary.logic.object;
 
 import com.linwei.annotation.ObjectFactory;
 

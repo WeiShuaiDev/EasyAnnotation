@@ -1,6 +1,6 @@
 package com.linwei.buriedpointlibrary.exception;
 
-import com.linwei.buriedpointlibrary.factory.ObjectFactoryClasses;
+import com.linwei.buriedpointlibrary.logic.object.ObjectFactoryClasses;
 
 /**
  * @Author: WS
