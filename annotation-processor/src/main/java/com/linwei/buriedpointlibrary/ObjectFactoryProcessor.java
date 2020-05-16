@@ -91,7 +91,6 @@ public class ObjectFactoryProcessor extends AbstractProcessor {
         } catch (Exception e) {
             mProcessorUtils.eLog(e.getMessage());
         }
-
         return true;
     }
 

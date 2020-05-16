@@ -18,20 +18,20 @@ import javax.lang.model.element.TypeElement;
  * @Time: 2020/5/13
  * @Description: Factory工厂类模板生成
  */
-public class ObjectFactoryGenerator implements ObjectGenerator {
-    @Override
-    public void generator(String object,
+public class ObjectFactoryGenerator {
+
+    public void generator(String clazzType,
                           ObjectFactoryGroupedClasses groupedClasses,
                           ProcessorUtils processorUtils,
                           ProcessingEnvironment processingEnv) {
 
-        if ("".equals(object)) {
+        if ("".equals(clazzType)) {
             throw new NullPointerException(
                     String.format("getQualifiedName()  is null or empty! that's not allowed"));
         }
 
         TypeElement superTypeElement = processorUtils.processorElementUtils().
-                getTypeElement(object);
+                getTypeElement(clazzType);
         String classes = superTypeElement.getSimpleName().toString();
 
         MethodSpec.Builder methodBuilder = MethodSpec.methodBuilder(Constant.METHOD_FACTORY)
