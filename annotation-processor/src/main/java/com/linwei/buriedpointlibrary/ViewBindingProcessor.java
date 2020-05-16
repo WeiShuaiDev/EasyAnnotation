@@ -18,7 +18,12 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 
 /**
  * @Author: WS
@@ -52,23 +57,28 @@ public class ViewBindingProcessor extends AbstractProcessor {
         //获取@OnClick注解信息
         Set<? extends Element> onClickElements = roundEnvironment.getElementsAnnotatedWith(OnClick.class);
 
-        //校验@BindView，声明变量public View viwe
+        //校验@BindView，声明变量public View v
         for (Element fieldElement : bindViewElements) {
-            mBindGroupedClasses.parseBindView(fieldElement);
+            if(checkValidFiled(fieldElement))
+                mBindGroupedClasses.parseBindView(fieldElement);
         }
 
         //校验@OnClick,声明方法public void onClick（View view）{}
-        for (Element onClickElement : onClickElements) {
-            mBindGroupedClasses.parseListenerView(onClickElement);
+        for (Element executableElement : onClickElements) {
+            if (checkMethodElement(executableElement))
+                mBindGroupedClasses.parseListenerView(executableElement);
         }
 
         try {
             //解析注解配置信息，并生成写入文件
             HashMap<TypeElement, List<CodeBlock.Builder>> bindMaps = mBindGroupedClasses.getBindMaps();
-            for (Map.Entry<TypeElement, List<CodeBlock.Builder>> entry : bindMaps.entrySet()) {
-                mBindGenerator.generator(entry.getKey(), entry.getValue(), mProcessorUtils, processingEnv);
+            if(bindMaps.size()>0) {
+                for (Map.Entry<TypeElement, List<CodeBlock.Builder>> entry : bindMaps.entrySet()) {
+                    mBindGenerator.generator(entry.getKey(), entry.getValue(), mProcessorUtils, processingEnv);
+                }
+
+                mBindGroupedClasses.deleteAll();
             }
-            bindMaps.clear();
         } catch (Exception e) {
             e.printStackTrace();
             mProcessorUtils.eLog(e.getMessage());
@@ -87,5 +97,53 @@ public class ViewBindingProcessor extends AbstractProcessor {
         type.add(BindView.class.getCanonicalName());
         type.add(OnClick.class.getCanonicalName());
         return type;
+    }
+
+    /**
+     * 校验字段，格式：public View v;
+     * @param element
+     * @return
+     */
+    private boolean checkValidFiled(Element element){
+        if(element==null) return false;
+        //判断变量访问修饰符
+        if(!element.getModifiers().contains(Modifier.PUBLIC)){
+            mProcessorUtils.eLog("The field $s not public",
+                    element.getSimpleName());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 校验方法,格式: public void onClick(View v){}
+     * @param element
+     * @return
+     */
+    private boolean checkMethodElement(Element element){
+        if(element==null) return false;
+        ExecutableElement executableElement=(ExecutableElement)element;
+        //判断方法访问修饰符
+        if(!executableElement.getModifiers().contains(Modifier.PUBLIC)){
+            mProcessorUtils.eLog("The method $s not public",
+                    element.getSimpleName());
+            return false;
+        }
+        //判断方法的返回类型
+        TypeMirror returnType = executableElement.getReturnType();
+        if(returnType.getKind()!= TypeKind.VOID){
+            mProcessorUtils.eLog("The  method $s return type not void",
+                    element.getSimpleName());
+            return false;
+        }
+        //判断方法返回参数
+        List<? extends VariableElement> parameters = executableElement.getParameters();
+        if(parameters.size()!=1){
+            mProcessorUtils.eLog("The  method $s parameter size entry",
+                    element.getSimpleName());
+            return  false;
+        }
+
+        return true;
     }
 }

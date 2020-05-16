@@ -9,9 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.linwei.annotation.TwoActivity"></activity>
-        <activity android:name="com.linwei.annotation.MainActivity" />
-        <activity android:name="com.linwei.annotation.OneActivity">
+        <activity android:name=".OneActivity"></activity>
+        <activity android:name=".TwoActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ThreeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

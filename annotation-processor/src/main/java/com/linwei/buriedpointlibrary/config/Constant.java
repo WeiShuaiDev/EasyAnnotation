@@ -17,4 +17,6 @@ public interface Constant {
     String INIT_SUFFIX = "$Init";
 
     String FACTORY_SUFFIX = "$Factory";
+
+    String VIEW_BINDING_SUFFIX="$ViewBinding";
 }
