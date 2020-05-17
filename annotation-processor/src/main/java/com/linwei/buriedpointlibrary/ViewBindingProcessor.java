@@ -2,8 +2,8 @@ package com.linwei.buriedpointlibrary;
 
 import com.linwei.annotation.BindView;
 import com.linwei.annotation.OnClick;
-import com.linwei.buriedpointlibrary.logic.bind.BindGroupedClasses;
-import com.linwei.buriedpointlibrary.template.bind.BindGenerator;
+import com.linwei.buriedpointlibrary.logic.bind.ViewBindingGroupedClasses;
+import com.linwei.buriedpointlibrary.template.bind.ViewBindingGenerator;
 import com.linwei.buriedpointlibrary.utils.ProcessorUtils;
 import com.squareup.javapoet.CodeBlock;
 
@@ -34,9 +34,9 @@ public class ViewBindingProcessor extends AbstractProcessor {
 
     private ProcessorUtils mProcessorUtils;
 
-    private BindGroupedClasses mBindGroupedClasses;
+    private ViewBindingGroupedClasses mViewBindingGroupedClasses;
 
-    private BindGenerator mBindGenerator;
+    private ViewBindingGenerator mViewBindingGenerator;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -44,9 +44,9 @@ public class ViewBindingProcessor extends AbstractProcessor {
         //注解处理器工具类
         mProcessorUtils = ProcessorUtils.getInstance(processingEnvironment);
         //解析注解信息类
-        mBindGroupedClasses = new BindGroupedClasses();
+        mViewBindingGroupedClasses = new ViewBindingGroupedClasses();
         //生产模板对象
-        mBindGenerator = new BindGenerator();
+        mViewBindingGenerator = new ViewBindingGenerator();
 
     }
 
@@ -60,24 +60,24 @@ public class ViewBindingProcessor extends AbstractProcessor {
         //校验@BindView，声明变量public View v
         for (Element fieldElement : bindViewElements) {
             if(checkValidFiled(fieldElement))
-                mBindGroupedClasses.parseBindView(fieldElement);
+                mViewBindingGroupedClasses.parseBindView(fieldElement);
         }
 
         //校验@OnClick,声明方法public void onClick（View view）{}
         for (Element executableElement : onClickElements) {
             if (checkMethodElement(executableElement))
-                mBindGroupedClasses.parseListenerView(executableElement);
+                mViewBindingGroupedClasses.parseListenerView(executableElement);
         }
 
         try {
             //解析注解配置信息，并生成写入文件
-            HashMap<TypeElement, List<CodeBlock.Builder>> bindMaps = mBindGroupedClasses.getBindMaps();
+            HashMap<TypeElement, List<CodeBlock.Builder>> bindMaps = mViewBindingGroupedClasses.getBindMaps();
             if(bindMaps.size()>0) {
                 for (Map.Entry<TypeElement, List<CodeBlock.Builder>> entry : bindMaps.entrySet()) {
-                    mBindGenerator.generator(entry.getKey(), entry.getValue(), mProcessorUtils, processingEnv);
+                    mViewBindingGenerator.generator(entry.getKey(), entry.getValue(), mProcessorUtils, processingEnv);
                 }
 
-                mBindGroupedClasses.deleteAll();
+                mViewBindingGroupedClasses.deleteAll();
             }
         } catch (Exception e) {
             e.printStackTrace();

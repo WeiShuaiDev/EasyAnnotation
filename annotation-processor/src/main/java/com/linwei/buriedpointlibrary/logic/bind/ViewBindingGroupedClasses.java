@@ -8,14 +8,14 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
-public class BindGroupedClasses {
+public class ViewBindingGroupedClasses {
 
     private HashMap<TypeElement, List<CodeBlock.Builder>> bindMaps = new HashMap<>();
 
-    private BindClasses mBindClasses;
+    private ViewBindingClasses mViewBindingClasses;
 
-    public BindGroupedClasses(){
-        mBindClasses = new BindClasses();
+    public ViewBindingGroupedClasses(){
+        mViewBindingClasses = new ViewBindingClasses();
     }
 
 
@@ -27,7 +27,7 @@ public class BindGroupedClasses {
     public void parseBindView(Element element) {
         ElementKind kind = element.getKind();
         if (kind == ElementKind.FIELD) {
-            CodeBlock.Builder builder = mBindClasses.parseBindView(element);
+            CodeBlock.Builder builder = mViewBindingClasses.parseBindView(element);
             if(builder!=null) {
                 saveCodeBlockData(element, builder);
             }
@@ -42,7 +42,7 @@ public class BindGroupedClasses {
     public void parseListenerView(Element element) {
         ElementKind kind = element.getKind();
         if (kind == ElementKind.METHOD) {
-            ArrayList<CodeBlock.Builder> builder = mBindClasses.parseListenerView(element);
+            ArrayList<CodeBlock.Builder> builder = mViewBindingClasses.parseListenerView(element);
             if(builder!=null) {
                 saveCodeBlockData(element, builder);
             }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import javax.lang.model.element.Element;
 
-class BindClasses {
+class ViewBindingClasses {
 
     /**
      * 解析ViewBind注解信息，并转换为CodeBlock.builder数据
