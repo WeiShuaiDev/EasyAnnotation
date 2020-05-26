@@ -1,8 +1,5 @@
 
-## 一、依赖EasyAnnotation
-
-审核中
-## 二、功能介绍
+## 一、功能介绍
 
 | 注解             | 描述                                                   |
 | ---------------- | ------------------------------------------------------ |
@@ -13,7 +10,7 @@
 | @IntentMethod    | 指定Activity跳转目标点标识                             |
 | @ObjectFactory   | 指定生成对象工厂类                                     |
 
-### 2.1、使用数据绑定功能
+### 1.1、使用数据绑定功能
 
 1. 初始化注解，需要在Activity初始化方法onCreate，调用AnnotationUtils.bind(this)进行注入。
 
@@ -43,9 +40,9 @@
            }
        }
    ```
-### 2.2、使用Activity之间跳转功能
+### 1.2、使用Activity之间跳转功能
 
-#### 2.2.1、使用成员变量设置Activity中binder参数，@IntentField(目标Activity)、@IntentMethod(目标Activity)
+#### 1.2.1、使用成员变量设置Activity中binder参数，@IntentField(目标Activity)、@IntentMethod(目标Activity)
 
 1. Activity传递数据，并进行跳转。
 
@@ -94,7 +91,7 @@
     }
    ```
 
-#### 2.2.2、使用方法形参设置Activity中binder参数，@IntentParameter(目标Activity)、@IntentMethod(目标Activity)
+#### 1.2.2、使用方法形参设置Activity中binder参数，@IntentParameter(目标Activity)、@IntentMethod(目标Activity)
 
 1. Activity传递数据，并进行跳转。
 
@@ -119,7 +116,7 @@
                    "count=" + count + ";name=" + name, Toast.LENGTH_SHORT).show();
        }
    ```
-### 2.3、使用生成对象工厂类
+### 1.3、使用生成对象工厂类
 
 1. @ObjectFactory(type=父类.class,key="类标识")，生成实例化对象。
 
